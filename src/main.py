@@ -1,7 +1,18 @@
 from machine import Pin, I2C
+from neopixel import NeoPixel
 from array import array
 
-# DEVICE_INA3221 = 0x
+# Lian Li AF120
+# These are in sequence order, edges start at the power connector and move clockwise when looking at the side of the
+# fan with the hub supports
+# Hub - 8 LEDs
+# Top Right - 3
+# Top Left - 3
+# Bottom Left - 3
+# Bottom Right - 3
+# 20 Total LEDs
+
+SHUNT_RESISTOR_VALUE = 0.03
 
 SHUNT_VOLTAGE = 1
 BUS_VOLTAGE = 2
@@ -44,7 +55,8 @@ CHANNEL_CURMON_BUSV_MAP = (
     0x2, 0x2
 )
 
-i2c = I2C(0, scl=Pin(5), sda=Pin(4), freq=400_000)
+i2c = I2C(0, scl=Pin(5, pull=Pin.PULL_UP), sda=Pin(4, Pin.PULL_UP), freq=400_000)
+np: NeoPixel
 
 
 def _resetDevice(device_num: int) -> bool:
@@ -141,6 +153,16 @@ def readShuntVoltage(channel: int) -> float:
     """
     return _readVoltage(channel, SHUNT_VOLTAGE)
 
+def readChannelCurrent(channel: int) -> float:
+    """
+    Reads the current value for a channel
+
+    :param channel:
+    :return:
+    """
+    return readShuntVoltage(channel) / SHUNT_RESISTOR_VALUE
+
+
 
 def readBusVoltage(channel: int) -> float:
     """
@@ -151,3 +173,15 @@ def readBusVoltage(channel: int) -> float:
     return _readVoltage(channel, BUS_VOLTAGE)
 
 
+
+def initRGBStrip(pin: Pin, num_leds: int = 63, rgbw = True):
+    global np
+    np = NeoPixel(Pin(pin, mode=Pin.OUT), num_leds, bpp=4 if rgbw else 3)
+
+def applyRGBW(r, g, b, w):
+    np.fill((r,g,b,w))
+    np.write()
+
+def applyRGB(r, g, b):
+    np.fill((r,g,b))
+    np.write()
