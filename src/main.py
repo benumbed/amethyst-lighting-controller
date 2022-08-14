@@ -12,6 +12,8 @@ from array import array
 # Bottom Right - 3
 # 20 Total LEDs
 
+LED_PINS = (0, 1, 2, 3, 4, 5, 16, 17, 18, 19, 20, 21)
+
 SHUNT_RESISTOR_VALUE = 0.03
 
 SHUNT_VOLTAGE = 1
@@ -20,7 +22,7 @@ BUS_VOLTAGE = 2
 # 0 - Top 3 tri-terminals
 # 1 - Mid 3 tri-terminals
 # 2 - Bottom 3 tri-terminals
-CURMON_INA3221_ADDRS = (0x40, 0x41, 0x42)
+CURMON_INA3221_ADDRS = (0x40, 0x41, 0x42, 0x43)
 # Shunt, Bus
 INA3221_LSB = (0.00004, 0.008)
 
@@ -35,27 +37,24 @@ CHANNEL_CURMON_DEVICE_MAP = (
     0x40, 0x40, 0x40,
     0x41, 0x41, 0x41,
     0x42, 0x42, 0x42,
-    0x45, 0x45,
-    0x44, 0x44
+    0x42, 0x42, 0x42,
 )
 # Maps LED channels 0-12 to their channel on the current monitor
 CHANNEL_CURMON_CHAN_MAP = (
     0x1, 0x3, 0x5,
     0x1, 0x3, 0x5,
     0x1, 0x3, 0x5,
-    0x1, 0x1,
-    0x1, 0x1
+    0x1, 0x3, 0x5,
 )
 
 CHANNEL_CURMON_BUSV_MAP = (
     0x2, 0x4, 0x6,
     0x2, 0x4, 0x6,
     0x2, 0x4, 0x6,
-    0x2, 0x2,
-    0x2, 0x2
+    0x2, 0x4, 0x6,
 )
 
-i2c = I2C(0, scl=Pin(5, pull=Pin.PULL_UP), sda=Pin(4, Pin.PULL_UP), freq=400_000)
+i2c = I2C(1, scl=Pin(7, pull=Pin.PULL_UP), sda=Pin(6, Pin.PULL_UP), freq=400_000)
 np: NeoPixel
 
 
@@ -173,8 +172,12 @@ def readBusVoltage(channel: int) -> float:
     return _readVoltage(channel, BUS_VOLTAGE)
 
 
+def initAllStrips(r, g, b, w):
+    for pin in LED_PINS:
+        initRGBStrip(pin, 144)
+        applyRGBW(r,g,b,w)
 
-def initRGBStrip(pin: Pin, num_leds: int = 63, rgbw = True):
+def initRGBStrip(pin: int, num_leds: int = 63, rgbw = True):
     global np
     np = NeoPixel(Pin(pin, mode=Pin.OUT), num_leds, bpp=4 if rgbw else 3)
 
