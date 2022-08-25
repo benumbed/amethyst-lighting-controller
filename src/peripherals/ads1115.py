@@ -74,12 +74,12 @@ CFG_COMP_QUE_2 = const(0x1)
 CFG_COMP_QUE_4 = const(0x2)
 CFG_COMP_QUE_DISABLE = const(0x3)   # Default
 
-LSB_6_144 = const(0.0001875)
-LSB_4_096 = const(0.000125)
-LSB_2_048 = const(0.0000625)        # Default
-LSB_1_024 = const(0.00003125)
-LSB_0_512 = const(0.000015625)
-LSB_0_256 = const(0.0000078125)
+LSB_6_144 = 0.0001875
+LSB_4_096 = 0.000125
+LSB_2_048 = 0.0000625        # Default
+LSB_1_024 = 0.00003125
+LSB_0_512 = 0.000015625
+LSB_0_256 = 0.0000078125
 
 # FSR config values after bitwise and-ing with 0xE on top config byte
 FSR_LSB_IDX_MAP = (0, 2, 4, 6, 8, 10, 12, 14)

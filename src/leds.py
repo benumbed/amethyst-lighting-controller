@@ -23,7 +23,8 @@ class LedControl:
                  pin_led_counts: tuple,
                  pin_names: tuple = None,
                  rgb_color: tuple = DEFAULT_RGB_COLOR,
-                 rgbw_color: tuple = DEFAULT_RGBW_COLOR):
+                 rgbw_color: tuple = DEFAULT_RGBW_COLOR,
+                 initialize_to_on: bool = False):
         """
 
         :param pins: Tuple of GPIO pins to use for RGB(W) control
@@ -31,10 +32,12 @@ class LedControl:
                                otherwise
         :param pin_led_counts: Number of LEDs for each `pins` slot
         :param pin_names: The names to use for each pin (will end up as the channel names)
+        :param initialize_to_on: If `True` then the LEDs will be set to their default values during initialization
         """
         self._rgb_color_default = rgb_color
         self._rgbw_color_default = rgbw_color
-        self.rgb_pixel_strings: tuple = self._initAllPins(pins, pin_rgbw_truth, pin_led_counts)
+        self.rgb_pixel_strings: tuple = self._initAllPins(pins, pin_rgbw_truth, pin_led_counts,
+                                                          init_to_on=initialize_to_on)
         self._chan_names: tuple = pin_names
 
         collect()
@@ -50,7 +53,7 @@ class LedControl:
     def chanIsRgbw(self, chan_num: int):
         return True if self.rgb_pixel_strings[chan_num].bpp == RGBW_BPP else False
 
-    def _initAllPins(self, pins: tuple, pin_rgbw_truth: tuple, pin_led_counts: tuple) -> tuple:
+    def _initAllPins(self, pins: tuple, pin_rgbw_truth: tuple, pin_led_counts: tuple, init_to_on = False) -> tuple:
         """
         Initializes all RGB(w) pins with the provided pin numbers and LED counts
 
@@ -65,7 +68,8 @@ class LedControl:
                 pins[idx],
                 pin_led_counts[idx],
                 has_white=pin_rgbw_truth[idx],
-                default_color=self._rgbw_color_default if pin_rgbw_truth[idx] else self._rgb_color_default)
+                default_color=None if not init_to_on
+                              else (self._rgbw_color_default if pin_rgbw_truth[idx] else self._rgb_color_default))
             )
 
         return tuple(rgb_pins)

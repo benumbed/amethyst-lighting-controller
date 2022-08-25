@@ -15,8 +15,8 @@ from micropython import const
 from gc import collect
 from struct import unpack
 
-DEVICE_SHUNT_LSB = const(0.00004)
-DEVICE_BUS_LSB = const(0.008)
+DEVICE_SHUNT_LSB = 0.00004
+DEVICE_BUS_LSB = 0.008
 
 SHUNT_VOLTAGE = const(1)
 BUS_VOLTAGE = const(2)
@@ -124,7 +124,7 @@ class INA3221:
         self._two_byte_value = bytearray(2)
         self._shifted_voltage = bytearray(2)
         self._config_register_cache = bytearray((ADDR_CONFIG_REG, 0x0, 0x0))
-        self._current_device_addr = 0x40
+        self._active_device_addr = 0x40
         self._volt_read_cfg = bytearray(4)
 
         collect()   # Take any GC hits at init time
@@ -228,15 +228,16 @@ class INA3221:
         """
         return self._devices[device_id].address
 
-    def setCurrentDevice(self, device_id: int):
+    def setActiveDevice(self, device_id: int):
         """
-        Sets the current device that is being operated against
+        Sets the active device that is being operated against
 
         :param device_id: ID of device to switch operations to
         """
-        if device_id == self._current_device_addr:
+        addr = self.getDeviceAddr(device_id)
+        if addr == self._active_device_addr:
             return
-        self._current_device_addr = self.getDeviceAddr(device_id)
+        self._active_device_addr = addr
 
     @micropython.native
     def _read(self, num_bytes: int, address: int or None = None) -> bytes:
@@ -248,7 +249,7 @@ class INA3221:
 
         :return: The returned bytes from the i2c bus
         """
-        return self._i2c.readfrom(self._current_device_addr if address is None else address, num_bytes)
+        return self._i2c.readfrom(self._active_device_addr if address is None else address, num_bytes)
 
     @micropython.native
     def _write(self, value: bytearray or bytes, valueHasAddress: int = False):
@@ -259,7 +260,7 @@ class INA3221:
         :param valueHasAddress: Allow overriding of the current device addr stored on the class
                                 (address must be first byte of `value`)
         """
-        self._i2c.writeto(self._current_device_addr if not valueHasAddress else value[0],
+        self._i2c.writeto(self._active_device_addr if not valueHasAddress else value[0],
                           value if not valueHasAddress else value[1:])
 
     @micropython.native
