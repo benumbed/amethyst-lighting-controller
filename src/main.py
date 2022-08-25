@@ -7,7 +7,7 @@ pico_led = picoled.PicoLed()
 pico_led.blink(20)
 
 from leds import LedControl
-from peripherals import ina3221, ads1115
+from peripherals import ina3221, ads1115, dht20
 
 
 # TODO:
@@ -62,7 +62,7 @@ leds: LedControl
 current: ina3221.INA3221
 adc: ads1115.ADS1115
 i2c: I2C
-
+dht: dht20.Dht20
 
 
 def initializeController():
@@ -71,7 +71,7 @@ def initializeController():
 
     :return:
     """
-    global leds, i2c, current, adc, Initialized
+    global leds, i2c, current, adc, Initialized, dht
 
     pico_led.blink(50)
     i2c = I2C(1, scl=Pin(7), sda=Pin(6))
@@ -83,10 +83,13 @@ def initializeController():
     current.addDevice(0x42, "Channels 6-8", shunt_value=SHUNT_RESISTOR_VALUE)
     current.addDevice(0x43, "Channels 9-11", shunt_value=SHUNT_RESISTOR_VALUE)
 
-    # pico_led.blink(300)
-    # adc = ads1115.ADS1115(i2c)
-    # adc.addDevice(0x48)
+    pico_led.blink(300)
+    adc = ads1115.ADS1115(i2c)
+    adc.addDevice(0x48, "Temperature ADC 1")
+    adc.addDevice(0x49, "Temperature ADC 2")
 
+    pico_led.blink(500)
+    dht = dht20.Dht20(i2c)
 
     pico_led.blink(800)
     leds = LedControl(
