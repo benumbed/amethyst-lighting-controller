@@ -1,3 +1,10 @@
+"""
+main.py
+
+Entry-point for the Amethyst LED controller
+
+Copyright (C) 2022 Nick Whalen (benumbed@projectneutron.com)
+"""
 from gc import collect
 from machine import I2C, Pin, SPI
 from micropython import const, alloc_emergency_exception_buf
@@ -17,6 +24,7 @@ from peripherals import ina3221, ads1115, dht20
 # Allocates an exception buffer for ISRs
 alloc_emergency_exception_buf(256)
 
+DeviceName = "Amethyst LED Controller"
 Initialized = False
 
 # Lian Li AF120/Infinity
@@ -43,11 +51,6 @@ CHANNEL_NAMES = (
     "Bottom Back and Right",    # 10
     "Bottom Front"              # 11
 )
-CHANNEL_PIN_MAP = (2, 17, 21, 1, 20, 0, 19, 18, 16, 3, 4, 5)
-CHANNEL_RGBW_LEDS = (True, False, True, True, True, True, False, False, False, True, True, True)
-CHANNEL_LED_COUNTS = (59, 60, 58, 65, 65, 65, 28, 60, 60, 62, 93, 25)
-RGB_DEFAULT_COLOR = (128, 0, 128)
-RGBW_DEFAULT_COLOR = (0, 0, 64, 96)
 
 SHUNT_RESISTOR_VALUE = 0.03  # All 4 current monitor boards use 0.03 Ohm shunts
 CURRENT_MON_CRIT_PINS = (11, 10, 26, 22)
@@ -93,12 +96,8 @@ def initializeController():
 
     pico_led.blink(800)
     leds = LedControl(
-        CHANNEL_PIN_MAP,
-        CHANNEL_RGBW_LEDS,
-        CHANNEL_LED_COUNTS,
-        CHANNEL_NAMES,
-        RGB_DEFAULT_COLOR,
-        RGBW_DEFAULT_COLOR,
+        current,
+        pin_names=CHANNEL_NAMES,
         initialize_to_on=True)
 
     Initialized = True
