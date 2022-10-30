@@ -3,7 +3,7 @@ leds.py
 
 LED control (SK6812 and WS2812) for the Pico.
 
-Copyright (C) 2022 Nick Whalen (benumbed@projectneutron.com)
+Copyright (C) 2022 Nick Whalen (purplxed@projectneutron.com)
 """
 from gc import collect
 from machine import Pin, Timer

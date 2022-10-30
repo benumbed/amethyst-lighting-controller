@@ -3,7 +3,7 @@ temperature.py
 
 Helper methods for measuring temperature
 
-Copyright (C) 2022 Nick Whalen (benumbed@projectneutron.com)
+Copyright (C) 2022 Nick Whalen (purplxed@projectneutron.com)
 
 The Steinhart-Hart equations were pulled from
 https://www.allaboutcircuits.com/industry-articles/how-to-obtain-the-temperature-value-from-a-thermistor-measurement/

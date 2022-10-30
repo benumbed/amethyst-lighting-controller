@@ -3,7 +3,7 @@ picoled.py
 
 Helper methods for the Pico's on-board LED
 
-Copyright (C) 2022 Nick Whalen (benumbed@projectneutron.com)
+Copyright (C) 2022 Nick Whalen (purplxed@projectneutron.com)
 """
 from machine import Pin, Timer
 

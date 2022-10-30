@@ -3,7 +3,7 @@ config.py
 
 Configuration utilities for lighting controller
 
-Copyright (C) 2022 Nick Whalen (benumbed@projectneutron.com)
+Copyright (C) 2022 Nick Whalen (purplxed@projectneutron.com)
 """
 import os
 import struct

@@ -3,7 +3,7 @@ dht20.py
 
 Management for DHT20 temp/humidity sensor.
 
-Copyright (C) 2022 Nick Whalen (benumbed@projectneutron.com)
+Copyright (C) 2022 Nick Whalen (purplxed@projectneutron.com)
 """
 from gc import collect
 

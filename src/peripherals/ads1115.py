@@ -1,7 +1,7 @@
 """
 ads1115.py
 
-Copyright (C) 2022 Nick Whalen (benumbed@projectneutron.com)
+Copyright (C) 2022 Nick Whalen (purplxed@projectneutron.com)
 
 MicroPython-based management of ADS1115 I2C 4-channel (muxed) 16-bit Delta-Sigma ADC chips
 Written from Rev. D of datasheet: https://www.ti.com/lit/ds/symlink/ads1115.pdf

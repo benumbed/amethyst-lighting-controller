@@ -3,7 +3,7 @@ main.py
 
 Entry-point for the Amethyst LED controller
 
-Copyright (C) 2022 Nick Whalen (benumbed@projectneutron.com)
+Copyright (C) 2022 Nick Whalen (purplxed@projectneutron.com)
 """
 from gc import collect
 from machine import I2C, Pin, SPI

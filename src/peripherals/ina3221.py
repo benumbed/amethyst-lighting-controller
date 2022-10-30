@@ -5,7 +5,7 @@ Provides a class to manage INA3221 current monitors from TI. NOTE: This class is
 boards commonly available on Amazon and Aliexpress. Chances are any INA3221 implementation will work, but the above
 boards were what were tested against.
 
-Copyright (C) 2022 Nick Whalen (benumbed@projectneutron.com)
+Copyright (C) 2022 Nick Whalen (purplxed@projectneutron.com)
 """
 import micropython
 from array import array
